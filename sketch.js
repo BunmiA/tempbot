@@ -1,112 +1,75 @@
-// ref -> https://stackoverflow.com/questions/43741561/how-do-i-is-it-posssible-to-keep-different-picture-in-each-side-of-box-in-p5
-//https://en.wikipedia.org/wiki/Isometric_projection#Mathematics
-//https://www.youtube.com/watch?v=oqgrKWAo24M&ab_channel=KevinWorkman
-
-//todo make it a cube and shine light and texture
-
-let angle = 0;
-BOX_WIDTH = 200;
-BOX_HEIGHT = 200;
-BOX_DEPTH = 200;
-
+// draw a spinning box
+// with width, height and depth of 50
+// alternative cube from https://editor.p5js.org/flomerboy/sketches/uq7nB_Dy
 function setup() {
-
-    createCanvas(600, 600, WEBGL);
-    SCALE_FACTOR = windowHeight / 4 /
-        Math.max(Math.max(BOX_WIDTH, BOX_HEIGHT), BOX_DEPTH);
+    createCanvas(800, 800, WEBGL);
 }
 
 function draw() {
-
-    background(255);
+    background(200);
+    // rotateY(frameCount * .01);
     rotateX(mouseY);
-    rotateY(-mouseX);
-
-
-    drawTempBot();
-
+    rotateZ(mouseX*0.1);
+    roundedCube(200, 10);
+    noStroke();
+    ambientMaterial(220);
 }
 
-function drawTempBot(){
-    angleMode(DEGREES);
-    let w = BOX_WIDTH * SCALE_FACTOR;
-    console.log(w)
-    let h = BOX_HEIGHT * SCALE_FACTOR;
-    let d = BOX_DEPTH * SCALE_FACTOR;
+function roundedCube(cubeWidth, radius) {
+    lights();
 
-    //fill(143, 232, 239)
-    //normalMaterial()
-    ambientLight(255)
-    ambientMaterial(143, 232, 239)
-    noStroke()
+    //walls
+    box(cubeWidth, cubeWidth - radius, cubeWidth - radius);
+    box(cubeWidth - radius, cubeWidth, cubeWidth - radius);
+    box(cubeWidth - radius, cubeWidth - radius, cubeWidth);
 
-    // Center the box.
-    //front
-    translate(-w / 2, -h / 2);
-    quad(0, 0, w, 0, w, h, 0, h);
-    color(151,233, 233)
-    //eyes
-    ambientMaterial(77, 115, 176);
-    circle(h/3, w/3, 15);
-    circle(h/1.5, w/3, 15);
-    //mouth
-    push();
-    translate(0, h/3);
-    // //scale(mouseX/400);
-    beginShape();
-    curveVertex(0, 50);
-    curveVertex(20, 0);
-    curveVertex(100, 25);
-    curveVertex(180, 0);
+//   //corners
+    translate((cubeWidth - radius) / 2, (cubeWidth - radius) / 2, (cubeWidth - radius) / 2);
+    sphere(radius / 2, 10, 10);
 
-    curveVertex(200, 50);
+    translate(-1 * (cubeWidth - radius), 0, 0);
+    sphere(radius / 2, 10, 10);
+    translate(0, -1 * (cubeWidth - radius), 0);
+    sphere(radius / 2, 10, 10);
+    translate((cubeWidth - radius), 0, 0);
+    sphere(radius / 2, 10, 10);
+    translate(0, 0, -1 * (cubeWidth - radius));
+    sphere(radius / 2, 10, 10);
+    translate(-1 * (cubeWidth - radius), 0, 0);
+    sphere(radius / 2, 10, 10);
+    translate(0, (cubeWidth - radius), 0);
+    sphere(radius / 2, 10, 10);
+    translate((cubeWidth - radius), 0, 0);
+    sphere(radius / 2, 10, 10);
 
-    curveVertex(180, 100);
-    curveVertex(100, 125);
-    curveVertex(20, 100);
+//   //edges
+    translate(0, -1 * ((cubeWidth - radius) / 2), 0);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(-1 * (cubeWidth - radius), 0, 0);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(0, 0, cubeWidth - radius);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(cubeWidth - radius, 0, 0);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
 
-    curveVertex(0, 50);
-    curveVertex(20, 0);
-    curveVertex(100, 25);
-    endShape();
-    pop();
+    rotateZ(PI / 2);
+    translate((cubeWidth - radius) / 2, (cubeWidth - radius) / 2, -1 * (cubeWidth - radius));
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(-1 * (cubeWidth - radius), 0, 0);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(0, 0, cubeWidth - radius);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(cubeWidth - radius, 0, 0);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
 
-    // side of box colour
-    ambientMaterial(112,	174	,195)
-    // left
-    push();
-    translate(0, 0, -d);
-    rotateY(-90);
-    quad(0, 0, d, 0, d, h, 0, h);
-
-    //top
-    pop();
-    push();
-    translate(0, 0, -d);
-    rotateX(90);
-    quad(0, 0, w, 0, w, d, 0, d);
-
-    //right
-    pop();
-    push();
-    translate(w, 0, 0);
-    rotateY(90);
-    quad(0, 0, d, 0, d, h, 0, h);
-
-    //bottom
-    pop();
-    push();
-    translate(0, h, 0);
-    rotateX(-90);
-    quad(0, 0, w, 0, w, d, 0, d);
-
-    //back
-    pop();
-    push();
-    rotateY(180);
-    translate(-w, 0, d);
-    quad(0, 0, w, 0, w, h, 0, h);
+    rotateX(PI / 2);
+    translate(0, -1 * ((cubeWidth - radius) / 2), -1 * ((cubeWidth - radius) / 2));
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(-1 * (cubeWidth - radius), 0, 0);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(0, 0, cubeWidth - radius);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
+    translate(cubeWidth - radius, 0, 0);
+    cylinder(radius / 2, cubeWidth - radius, 10, 1, false, false);
 
 }
-
-
